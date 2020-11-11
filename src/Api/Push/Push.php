@@ -46,6 +46,7 @@ class Push implements Api
 
         switch ($response->getStatusCode()) {
             case 200:
+            case 202: // Undocumented
                 return SendMessageResult::fromResponseData(Helpers::getJsonResponseData($response));
             case 401:
                 try {
