@@ -1,0 +1,27 @@
+{
+    "name": "raphaelvoisin/ringover-api",
+    "type": "library",
+    "description": "PHP wrapper for the Ringover API",
+    "keywords": ["ringover", "api", "php", "sms"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Raphaël Voisin",
+            "email": "raphael.voisin@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "guzzlehttp/guzzle": "~7.0|~6.0|~5.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8.36|^5.7",
+        "php-coveralls/php-coveralls": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "RaphaelVoisin\\Ringover\\": "src"
+        }
+    }
+}
