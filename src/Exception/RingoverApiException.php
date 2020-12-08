@@ -21,6 +21,12 @@ class RingoverApiException extends \RuntimeException
         ResponseInterface $response = null,
         \Exception $previous = null
     ) {
+        $body = $response->getBody();
+
+        if ($body->isSeekable()) {
+            return $body->rewind();
+        }
+
         $this->guzzleRequestException = RequestException::create($request, $response, $previous);
 
         parent::__construct($message . ' - ' . $this->guzzleRequestException->getMessage(), $this->guzzleRequestException->getCode(), $previous);
