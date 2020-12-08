@@ -53,13 +53,13 @@ class Push implements Api
                 try {
                     return SendMessageResult::fromResponseData(Helpers::getJsonResponseData($response));
                 } catch (InvalidJsonResponseDataException $e) {
-                    throw new ErrorInRequestException('Error in request', $request, $response, $e);
+                    throw Helpers::getUnknownResponseException($request, $response);
                 }
             case 401:
                 try {
                     $data = Helpers::getJsonResponseData($response);
                 } catch (InvalidJsonResponseDataException $e) {
-                    throw new ErrorInRequestException('Error in request', $request, $response, $e);
+                    throw Helpers::getUnknownResponseException($request, $response);
                 }
                 if ($data === 'Read only') {
                     throw new UnauthorizedException(
