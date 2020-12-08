@@ -24,7 +24,7 @@ class RingoverApiException extends \RuntimeException
         $body = $response->getBody();
 
         if ($body->isSeekable()) {
-            return $body->rewind();
+            $body->rewind();
         }
 
         $this->guzzleRequestException = RequestException::create($request, $response, $previous);
