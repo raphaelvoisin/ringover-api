@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace RaphaelVoisin\Ringover;
 
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\RequestOptions;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use RaphaelVoisin\Ringover\Api\Api;
 use RaphaelVoisin\Ringover\Api\Push\Push;
+use RaphaelVoisin\Ringover\Exception\SendRequestException;
 
 /**
  * @property Push $pushApi
@@ -52,11 +55,11 @@ class Client
         }
     }
 
-    public function sendRequest(string $endpoint, array $payload): ResponseInterface
+    public function buildRequest(string $endpoint, array $payload): RequestInterface
     {
         $uri = new Uri($endpoint);
 
-        $request = new Request(
+        return new Request(
             'POST',
             $uri,
             [
@@ -65,11 +68,23 @@ class Client
             ],
             \GuzzleHttp\json_encode($payload)
         );
+    }
 
-        return $this->httpClient->send($request, [
-            RequestOptions::HTTP_ERRORS => false,
-            RequestOptions::TIMEOUT => self::REQUEST_TIMEOUT
-        ]);
+    public function sendRequest(RequestInterface $request): ResponseInterface
+    {
+        try {
+            return $this->httpClient->send($request, [
+                RequestOptions::HTTP_ERRORS => false,
+                RequestOptions::TIMEOUT => self::REQUEST_TIMEOUT
+            ]);
+        } catch (GuzzleException $e) {
+            throw new SendRequestException(
+                'Error when sending request : ' . $e->getMessage(),
+                $request,
+                null,
+                $e
+            );
+        }
     }
 
     private function getApi(string $apiClass): Api
