@@ -95,4 +95,11 @@ class Client
 
         return $this->apis[$apiClass];
     }
+
+    public function setApiKey(string  $apiKey): self
+    {
+        $this->apiKey = $apiKey;
+
+        return $this;
+    }
 }
